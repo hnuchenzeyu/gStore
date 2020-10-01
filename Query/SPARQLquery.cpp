@@ -72,11 +72,15 @@ SPARQLquery::encodeQuery(KVstore* _p_kv_store)
   }
 }
 
+/**
+ * 把查询中的variables，分配id，查询就对id操作。
+*/
 void
 SPARQLquery::encodeQuery(KVstore* _p_kv_store, vector<vector<string> > sparql_query_varset)
 {
   for (unsigned i = 0; i < this->query_union.size(); i++) {
     (this->query_union[i])->encodeBasicQuery(_p_kv_store, sparql_query_varset[i]);
+    cout<<this->query_union[i]->to_str();
   }
 }
 

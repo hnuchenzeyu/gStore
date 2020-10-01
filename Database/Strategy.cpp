@@ -58,8 +58,10 @@ Strategy::handle(SPARQLquery& _query)
 {
 #ifdef MULTI_INDEX
   Util::logging("IN GeneralEvaluation::handle");
+  cout<<"~~~IN GeneralEvaluation::handle"<<endl;
 
   vector<BasicQuery*>& queryList = _query.getBasicQueryVec();
+  cout<<"$$$ In handle queryList's size is "<<queryList.size()<<endl;
   // enumerate each BasicQuery and retrieve their variables' mapping entity in the VSTree.
   vector<BasicQuery*>::iterator iter = queryList.begin();
   for (; iter != queryList.end(); iter++)
@@ -114,7 +116,6 @@ Strategy::handle(SPARQLquery& _query)
 
       //QueryHandler dispatch;
       //dispatch[0] = handler0;
-      cout << "run the method:" << this->method << endl;
       switch (this->method) {
       //BETTER: use function pointer array in C++ class
       case 0:

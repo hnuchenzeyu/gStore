@@ -1542,12 +1542,17 @@ void TempResult::print(int no)
     printf("temp result:\n");
   else
     printf("temp result no.%d:\n", no);
-
+  printf("czy: in TempResult, result.size() is %d\n", this->result.size());
   for (int i = 0; i < (int)this->result.size(); i++) {
-    for (int j = 0; j < this->id_varset.getVarsetSize(); j++)
+    // printf("czy: this->id_varset.getVarsetSize() = %d\n", this->id_varset.getVarsetSize());
+    for (int j = 0; j < this->id_varset.getVarsetSize(); j++){
+      // printf("id_varset ");
       printf("%d\t", this->result[i].id[j]);
-    for (int j = 0; j < this->str_varset.getVarsetSize(); j++)
+    }
+    for (int j = 0; j < this->str_varset.getVarsetSize(); j++){
+      // printf("str_varset ");
       printf("%s\t", this->result[i].str[j].c_str());
+    }
     printf("\n");
   }
 }

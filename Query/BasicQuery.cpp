@@ -466,7 +466,7 @@ BasicQuery::encodeBasicQuery(KVstore* _p_kvstore, const vector<string>& _query_v
   }
   cout << endl;
   //BETTER:ouput the selected pre vars
-
+  cout<<"~~~BasicQuery encode method is "<<this->encode_method<<endl;
   this->total_var_num = this->select_var_num;
   if (this->encode_method == BasicQuery::SELECT_VAR) {
     this->findVarNotInSelect();
@@ -877,6 +877,10 @@ BasicQuery::findVarNotInSelect()
   }
 }
 
+/**
+ * 记录每个triple的subject、predicate、object的出现次数。
+ * 记录保存在this->tuple2freq。
+*/
 void
 BasicQuery::buildTuple2Freq()
 {

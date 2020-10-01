@@ -37,6 +37,7 @@ help()
 int
 main(int argc, char* argv[])
 {
+  printf("add -g\n");
   //chdir(dirname(argv[0]));
   //#ifdef DEBUG
   Util util;

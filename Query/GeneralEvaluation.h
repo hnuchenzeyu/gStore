@@ -23,6 +23,7 @@
 #include "TempResult.h"
 #include "QueryCache.h"
 #include "ResultSet.h"
+#include "JumpingLikeJoin.h"
 
 class GeneralEvaluation {
   private:

@@ -40,8 +40,8 @@ CC = g++
 #NOTICE: -O2 is recommended, while -O3(add loop-unroll and inline-function) is dangerous
 #when developing, not use -O because it will disturb the normal 
 #routine. use it for test and release.
-CFLAGS = -c -Wall -O2 -pthread -std=c++11
-EXEFLAG = -O2 -pthread -std=c++11
+CFLAGS = -c -Wall -O2 -pthread -std=c++11 -g
+EXEFLAG = -O2 -pthread -std=c++11 -g
 #-coverage
 #CFLAGS = -c -Wall -pthread -g -std=c++11 -pg
 #EXEFLAG = -pthread -g -std=c++11 -pg
@@ -81,7 +81,8 @@ kvstoreobj = $(objdir)KVstore.o $(sitreeobj) $(istreeobj) $(ivtreeobj) $(ivarray
 utilobj = $(objdir)Util.o $(objdir)Bstr.o $(objdir)Stream.o $(objdir)Triple.o $(objdir)BloomFilter.o $(objdir)VList.o
 
 queryobj = $(objdir)SPARQLquery.o $(objdir)BasicQuery.o $(objdir)ResultSet.o  $(objdir)IDList.o \
-		   $(objdir)Varset.o $(objdir)QueryTree.o $(objdir)TempResult.o $(objdir)QueryCache.o $(objdir)GeneralEvaluation.o
+		   $(objdir)Varset.o $(objdir)QueryTree.o $(objdir)TempResult.o $(objdir)QueryCache.o \
+		   $(objdir)JumpingLikeJoin.o $(objdir)GeneralEvaluation.o
 
 signatureobj = $(objdir)SigEntry.o $(objdir)Signature.o
 
@@ -386,6 +387,9 @@ $(objdir)TempResult.o: Query/TempResult.cpp Query/TempResult.h Query/RegexExpres
 $(objdir)QueryCache.o: Query/QueryCache.cpp Query/QueryCache.h $(objdir)Util.o $(objdir)QueryTree.o \
 	$(objdir)TempResult.o $(objdir)Varset.o
 	$(CC) $(CFLAGS) Query/QueryCache.cpp $(inc) -o $(objdir)QueryCache.o $(openmp)
+
+$(objdir)JumpingLikeJoin.o: Query/JumpingLikeJoin.cpp Query/JumpingLikeJoin.h $(objdir)Util.o $(objdir)TempResult.o
+	$(CC) $(CFLAGS) Query/JumpingLikeJoin.cpp $(inc) -o $(objdir)JumpingLikeJoin.o $(openmp)
 
 #no more using $(objdir)Database.o
 $(objdir)GeneralEvaluation.o: Query/GeneralEvaluation.cpp Query/GeneralEvaluation.h Query/RegexExpression.h \

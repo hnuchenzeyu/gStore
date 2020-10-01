@@ -321,8 +321,13 @@ pair<Varset, Varset> QueryTree::GroupPattern::checkNoMinusAndOptionalVarAndSafeF
   return make_pair(occur_varset, new_ban_varset);
 }
 
+/**
+ * 遍历Pattern_type的sub_group_pattern[i]
+ * this->sub_group_pattern[i].pattern.blockid = i
+ */
 void QueryTree::GroupPattern::initPatternBlockid()
 {
+  cout<<"czy: in initPatternBlockid(), size of this->sub_group_pattern is "<<this->sub_group_pattern.size()<<endl;
   for (int i = 0; i < (int)this->sub_group_pattern.size(); i++)
     if (this->sub_group_pattern[i].type == SubGroupPattern::Pattern_type)
       this->sub_group_pattern[i].pattern.blockid = i;
@@ -662,4 +667,14 @@ void QueryTree::print()
   for (int j = 0; j < 80; j++)
     printf("=");
   printf("\n");
+}
+
+void QueryTree::printMember()
+{
+  cout<<"begin ################ print group_by"<<endl;
+  this->group_by.print();
+  cout<<"end ################ print group_by"<<endl;
+  cout<<"begin ################ print offset, limit"<<endl;
+  cout<<"offset="<<this->offset<<" limit="<<this->limit<<endl;
+  cout<<"end ################ print offset, limit"<<endl;
 }

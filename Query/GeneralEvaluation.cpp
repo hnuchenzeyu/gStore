@@ -406,6 +406,9 @@ bool GeneralEvaluation::expanseFirstOuterUnionGroupPattern(QueryTree::GroupPatte
 
 TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 {
+  printf("-----------------------------------------\n");
+	printf("czy: rewritingBasedQueryEvaluation dep=%d\n", dep);
+  printf("-----------------------------------------\n");
   deque<QueryTree::GroupPattern> queue;
   queue.push_back(this->rewriting_evaluation_stack[dep].group_pattern);
   vector<QueryTree::GroupPattern> group_pattern_union;
@@ -415,6 +418,8 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       group_pattern_union.push_back(queue.front());
     queue.pop_front();
   }
+
+  cout<<"czy: size of group_pattern_union is "<<group_pattern_union.size()<<endl;
 
   TempResultSet* result = new TempResultSet();
 
@@ -501,10 +506,16 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
     }
     triple_pattern.getVarset();
 
+    // pattern几乎不变
+
     //get useful varset
+    //下面代码块几乎不做什么
     Varset useful = this->query_tree.getResultProjectionVarset() + this->query_tree.getGroupByVarset();
     if (!this->query_tree.checkProjectionAsterisk()) {
+      cout<<"!!!!!!!!this->query_tree.checkProjectionAsterisk()"<<endl;
       for (int j = 0; j < dep; j++) {
+        // 这块不运行，因为dep=0。
+        cout<<"for j=0 < dep(0)"<<endl;
         QueryTree::GroupPattern& parrent_group_pattern = this->rewriting_evaluation_stack[j].group_pattern;
 
         for (int k = 0; k < (int)parrent_group_pattern.sub_group_pattern.size(); k++) {
@@ -516,6 +527,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       }
 
       for (int j = 0; j < (int)group_pattern->sub_group_pattern.size(); j++) {
+        // 这块也不运行，type为Pattern_type
         if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Optional_type)
           useful += group_pattern->sub_group_pattern[j].optional.group_pattern_resultset_maximal_varset;
         else if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Filter_type)
@@ -534,8 +546,15 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       if (triple_pattern.sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Pattern_type) {
         for (int k = 0; k < j; k++)
           if (triple_pattern.sub_group_pattern[k].type == QueryTree::GroupPattern::SubGroupPattern::Pattern_type)
-            if (triple_pattern.sub_group_pattern[j].pattern.subject_object_varset.hasCommonVar(triple_pattern.sub_group_pattern[k].pattern.subject_object_varset))
+            if (triple_pattern.sub_group_pattern[j].pattern.subject_object_varset.hasCommonVar(triple_pattern.sub_group_pattern[k].pattern.subject_object_varset)){
+              cout<<"---before mergePatternBlockID------------------------------------------------------"<<endl;
+              cout<<"j("<<j<<")'s pattern.subject_object_varset"<<endl;
+              triple_pattern.sub_group_pattern[j].pattern.subject_object_varset.print();
+              cout<<"k("<<k<<")'s pattern.subject_object_varset"<<endl;
+              triple_pattern.sub_group_pattern[k].pattern.subject_object_varset.print();
+              cout<<"---before mergePatternBlockID------------------------------------------------------"<<endl;
               triple_pattern.mergePatternBlockID(j, k);
+            }
       }
 
     //each connected block is a BasicQuery
@@ -560,6 +579,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
           else
             useful = occur;
 
+          //得到了select ?x1 ?x2 ...这些 ?变量，保存在useful。
           printf("select vars: ");
           useful.print();
 
@@ -579,6 +599,8 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
             long tv_afcheck = Util::get_cur_time();
             printf("after checkCache, used %ld ms.\n", tv_afcheck - tv_bfcheck);
           }
+
+          cout<<"czy: before export_flag, success is "<<success<<endl;
 
           if (this->export_flag) {
             this->strategy.fp = this->fp;
@@ -614,6 +636,26 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
           temp->release();
           delete temp;
         }
+    
+    cout<<"---encode_varset------------------------------------------------"<<endl;
+    for(int i = 0; i < (int)encode_varset.size();i++){
+      for(int j = 0; j < (int)encode_varset[i].size();j++)
+        printf("\t%s", encode_varset[i][j].c_str());
+      cout<<endl;
+    }
+    cout<<"---encode_varset------------------------------------------------"<<endl;
+    cout<<"---basic_query_handle-------------------------------------------"<<endl;
+    for(int i = 0; i < (int)basic_query_handle.size();i++){
+      printf("%d basic_query:\n", i);
+      for(int j = 0; j < (int)basic_query_handle[i].size();j++)
+        printf("%s\t%s\t%s\n", basic_query_handle[i][j].subject.value.c_str(), basic_query_handle[i][j].predicate.value.c_str(), basic_query_handle[i][j].object.value.c_str());
+    }
+    cout<<"---basic_query_handle-------------------------------------------"<<endl;
+
+    // encode_varset 是select紧跟的变量
+    // basic_query_handle 是pattern
+
+    cout<<"sparsql_query.query_uion's size is "<<sparql_query.getBasicQueryVec().size()<<endl;
 
     long tv_begin = Util::get_cur_time();
     sparql_query.encodeQuery(this->kvstore, encode_varset);
@@ -663,7 +705,13 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
     printf("after Handle, used %ld ms.\n", tv_handle - tv_fillcand);
 
     //collect and join the result of each BasicQuery
+    printf("----------------------------------------------\n");
+    printf("czy: num of sparql_query.getBasicQuery is %d\n", sparql_query.getBasicQueryNum());
+    printf("----------------------------------------------\n");
     for (int j = 0; j < sparql_query.getBasicQueryNum(); j++) {
+      printf("--------------------------------\n");
+      printf("czy: enter getBasicQueryNum loop\n");
+      printf("--------------------------------\n");
       TempResultSet* temp = new TempResultSet();
       temp->results.push_back(TempResult());
 
@@ -695,10 +743,42 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
         printf("after tryCache, used %ld ms.\n", tv_aftry - tv_bftry);
       }
 
+//---------------czy implements query of 3 edges with a same label.---------------------------------------------------
+      // initialize the hashTable.
+      JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin();
+
+      jumpingLikeJoin->initEdgeTable(temp);
+      jumpingLikeJoin->buildSubTable(temp);
+
+      TempResultSet* edge3 = jumpingLikeJoin->intersect(temp, temp);
+
+      // vector<QueryTree::ProjectionVar>& projection = this->query_tree.getProjection();
+      // projection.clear();
+      // projection.push_back(QueryTree::ProjectionVar("?x1"));
+      // projection.push_back(QueryTree::ProjectionVar("?x2"));
+      // projection.push_back(QueryTree::ProjectionVar("?x3"));
+      // projection.push_back(QueryTree::ProjectionVar("?x4"));
+
+      delete jumpingLikeJoin;
+      jumpingLikeJoin = NULL;
+
+      delete temp;
+      temp = edge3;
+
+      // temp->print();
+
+//---------------czy implements query of 3 edges with a same label.---------------------------------------------------
+
       if (sub_result->results.empty()) {
         delete sub_result;
         sub_result = temp;
+        printf("-------------------\n");
+	      printf("czy: not doJoin\n");
+        printf("-------------------\n");
       } else {
+        printf("-------------------\n");
+	      printf("czy: excute doJoin\n");
+        printf("-------------------\n");
         TempResultSet* new_result = new TempResultSet();
         sub_result->doJoin(*temp, *new_result, this->stringindex, this->query_tree.getGroupPattern().group_pattern_subject_object_maximal_varset);
 
@@ -713,6 +793,9 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 
     for (int j = 0; j < (int)group_pattern->sub_group_pattern.size(); j++)
       if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Bind_type) {
+        printf("-------------------\n");
+	      printf("czy: excute Bind\n");
+        printf("-------------------\n");
         TempResultSet* temp = new TempResultSet();
         temp->results.push_back(TempResult());
 
@@ -736,7 +819,9 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Filter_type)
         if (!group_pattern->sub_group_pattern[j].filter.done && group_pattern->sub_group_pattern[j].filter.varset.belongTo(group_pattern->group_pattern_resultset_minimal_varset)) {
           group_pattern->sub_group_pattern[j].filter.done = true;
-
+          printf("-------------------\n");
+	        printf("czy: excute Filter\n");
+          printf("-------------------\n");
           TempResultSet* new_result = new TempResultSet();
           sub_result->doFilter(group_pattern->sub_group_pattern[j].filter.root, *new_result, this->stringindex, group_pattern->group_pattern_subject_object_maximal_varset);
 
@@ -749,6 +834,9 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
     if (sub_result->results.empty() || !sub_result->results[0].result.empty()) {
       for (int j = 0; j < (int)group_pattern->sub_group_pattern.size(); j++)
         if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Optional_type) {
+          printf("-------------------\n");
+	        printf("czy: excute Optional\n");
+          printf("-------------------\n");
           if ((int)this->rewriting_evaluation_stack.size() == dep + 1) {
             this->rewriting_evaluation_stack.push_back(EvaluationStackStruct());
             this->rewriting_evaluation_stack.back().result = NULL;
@@ -775,6 +863,9 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
     for (int j = 0; j < (int)group_pattern->sub_group_pattern.size(); j++)
       if (group_pattern->sub_group_pattern[j].type == QueryTree::GroupPattern::SubGroupPattern::Filter_type)
         if (!group_pattern->sub_group_pattern[j].filter.done) {
+          printf("-------------------\n");
+	        printf("czy: excute Filter_type\n");
+          printf("-------------------\n");
           group_pattern->sub_group_pattern[j].filter.done = true;
 
           TempResultSet* new_result = new TempResultSet();
@@ -814,18 +905,26 @@ void GeneralEvaluation::getFinalResult(ResultSet& ret_result)
   if (this->query_tree.getQueryForm() == QueryTree::Select_Query) {
     long t0 = Util::get_cur_time();
 
+    cout<<"czy: is this->temp_result->results.empty? "<<this->temp_result->results.empty()<<endl;
     if (this->temp_result->results.empty()) {
       this->temp_result->results.push_back(TempResult());
       this->temp_result->results[0].id_varset += this->query_tree.getGroupPattern().group_pattern_resultset_maximal_varset;
     }
 
     Varset useful = this->query_tree.getResultProjectionVarset() + this->query_tree.getGroupByVarset();
+    cout<<"czy: in getFinalResult, ResultProjectionVarset and GroupByVarset are:"<<endl;
+    this->query_tree.getResultProjectionVarset().print();
+    this->query_tree.getGroupByVarset().print();
 
+    cout<<"czy: this->query_tree.checkProjectionAsterisk() = "<<this->query_tree.checkProjectionAsterisk()<<endl;
     if (this->query_tree.checkProjectionAsterisk()) {
       for (int i = 0; i < (int)this->temp_result->results.size(); i++)
         useful += this->temp_result->results[i].getAllVarset();
+      cout<<"czy: in this->query_tree.checkProjectionAsterisk()"<<endl;
+      useful.print();
     }
 
+    // 不会进入
     if ((int)this->temp_result->results.size() > 1 || this->query_tree.getProjectionModifier() == QueryTree::Modifier_Distinct) {
       TempResultSet* new_temp_result = new TempResultSet();
 
@@ -837,6 +936,7 @@ void GeneralEvaluation::getFinalResult(ResultSet& ret_result)
       this->temp_result = new_temp_result;
     }
 
+    // 不会进入
     if (this->query_tree.checkAtLeastOneAggregateFunction() || !this->query_tree.getGroupByVarset().empty()) {
       vector<QueryTree::ProjectionVar>& proj = this->query_tree.getProjection();
 
@@ -988,7 +1088,7 @@ void GeneralEvaluation::getFinalResult(ResultSet& ret_result)
       ret_result.setVar(result0.getAllVarset().vars);
       ret_result_varset = result0.getAllVarset();
     } else {
-      ret_result.select_var_num = this->query_tree.getProjectionVarset().getVarsetSize();
+      ret_result.select_var_num = this->query_tree.getProjectionVarset().getVarsetSize();// czy: need to modify.
       ret_result.setVar(this->query_tree.getProjectionVarset().vars);
       ret_result_varset = this->query_tree.getProjectionVarset();
     }
@@ -1042,7 +1142,7 @@ void GeneralEvaluation::getFinalResult(ResultSet& ret_result)
 			pthread_create(&tidp, NULL, &preread_from_index, arg);*/
 
       unsigned retAnsNum = ret_result.ansNum;
-      unsigned selectVar = ret_result.select_var_num;
+      unsigned selectVar = ret_result.select_var_num; //疑似出错源
       /*
 			int counterEntity = 0;
 			int counterLiteral = 0;
@@ -1121,7 +1221,7 @@ void GeneralEvaluation::getFinalResult(ResultSet& ret_result)
       }
       cout << "in getFinal Result the first half use " << Util::get_cur_time() - t0 << "  ms" << endl;
       //pthread_join(tidp, NULL);
-      this->stringindex->trySequenceAccess(true, -1);
+      this->stringindex->trySequenceAccess(true, -1); // 出错！
     } else {
       for (unsigned i = 0; i < ret_result.ansNum; i++)
         for (int j = 0; j < ret_result.select_var_num; j++) {

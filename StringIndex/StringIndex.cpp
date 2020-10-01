@@ -181,7 +181,7 @@ void StringIndexFile::trySequenceAccess(bool real, pthread_t tidp)
   }
 
   long min_begin = (*this->index_table)[minid].offset;
-  long max_end = (*this->index_table)[maxid].offset + (*this->index_table)[maxid].length;
+  long max_end = (*this->index_table)[maxid].offset + (*this->index_table)[maxid].length; // 出错！
 
   /*
 	long min_begin = this->request[0].offset; 

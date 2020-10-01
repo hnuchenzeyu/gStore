@@ -265,6 +265,13 @@ public:
         , distinct(false)
     {
     }
+
+    ProjectionVar(std::string _var)
+        : aggregate_type(None_type)
+        , var(_var)
+        , distinct(false)
+    {
+    }
   };
 
   class Order {
@@ -358,6 +365,7 @@ public:
   bool checkSelectAggregateFunctionGroupByValid();
 
   void print();
+  void printMember();
 };
 
 #endif // _QUERY_QUERYTREE_H
