@@ -174,9 +174,9 @@ bool
 Strategy::pre_handler(BasicQuery* basic_query, KVstore* kvstore, TYPE_TRIPLE_NUM* pre2num,
                       TYPE_TRIPLE_NUM* pre2sub, TYPE_TRIPLE_NUM* pre2obj, bool* dealed_triple)
 {
-  int triple_num = basic_query->getTripleNum();
+  int triple_num = basic_query->getTripleNum(); // 3
 
-  int var_num = basic_query->getVarNum();
+  int var_num = basic_query->getVarNum(); // 4
   // use constant filter to estimate now many ffits exist
   vector<int> estimate_num(var_num, 10000000);
 
@@ -193,7 +193,7 @@ Strategy::pre_handler(BasicQuery* basic_query, KVstore* kvstore, TYPE_TRIPLE_NUM
       int neighbor_id = basic_query->getEdgeNeighborID(_var_i, j);
       //-1: constant or variable not in join; otherwise, variable in join
       if (neighbor_id != -1) {
-        continue;
+        continue; // 下一次循环
       }
 
       char edge_type = basic_query->getEdgeType(_var_i, j);
@@ -260,6 +260,7 @@ Strategy::pre_handler(BasicQuery* basic_query, KVstore* kvstore, TYPE_TRIPLE_NUM
     }
     // skip pre_filter when the candidate of a variable is small
     // enough after constant_filter
+    cout<<"czy: _list.size()="<<_list.size()<<endl;
     if (_list.size() > 0) {
       for (int j = 0; j < var_degree; j++) {
         int neighbor_id = basic_query->getEdgeNeighborID(_var_i, j);
