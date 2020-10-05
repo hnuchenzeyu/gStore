@@ -528,7 +528,7 @@ Strategy::handler0(BasicQuery* _bq, vector<unsigned*>& _result_list)
   }
 
   Join* join = new Join(kvstore, pre2num, this->limitID_predicate, this->limitID_literal, this->limitID_entity);
-  join->join_basic(_bq, d_triple);
+  join->join_basic(_bq, d_triple); // 注意！
   delete join;
 
   long tv_join = Util::get_cur_time();

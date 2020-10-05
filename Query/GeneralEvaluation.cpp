@@ -765,7 +765,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       // delete temp;
       // temp = edge3;
 
-      temp->print();
+      // temp->print();
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
