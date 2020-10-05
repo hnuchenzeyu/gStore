@@ -745,27 +745,27 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
       // initialize the hashTable.
-      JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin();
+      //JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin();
 
-      jumpingLikeJoin->initEdgeTable(temp);
-      jumpingLikeJoin->buildSubTable(temp);
+      //jumpingLikeJoin->initEdgeTable(temp);
+      //jumpingLikeJoin->buildSubTable(temp);
 
-      TempResultSet* edge3 = jumpingLikeJoin->intersect(temp, temp);
+      //TempResultSet* edge3 = jumpingLikeJoin->intersect(temp, temp);
 
-      // vector<QueryTree::ProjectionVar>& projection = this->query_tree.getProjection();
-      // projection.clear();
-      // projection.push_back(QueryTree::ProjectionVar("?x1"));
-      // projection.push_back(QueryTree::ProjectionVar("?x2"));
-      // projection.push_back(QueryTree::ProjectionVar("?x3"));
-      // projection.push_back(QueryTree::ProjectionVar("?x4"));
+      //// vector<QueryTree::ProjectionVar>& projection = this->query_tree.getProjection();
+      //// projection.clear();
+      //// projection.push_back(QueryTree::ProjectionVar("?x1"));
+      //// projection.push_back(QueryTree::ProjectionVar("?x2"));
+      //// projection.push_back(QueryTree::ProjectionVar("?x3"));
+      //// projection.push_back(QueryTree::ProjectionVar("?x4"));
 
-      delete jumpingLikeJoin;
-      jumpingLikeJoin = NULL;
+      //delete jumpingLikeJoin;
+      //jumpingLikeJoin = NULL;
 
-      delete temp;
-      temp = edge3;
+      //delete temp;
+      //temp = edge3;
 
-      // temp->print();
+      temp->print();
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 

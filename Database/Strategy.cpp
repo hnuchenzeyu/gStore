@@ -61,10 +61,10 @@ Strategy::handle(SPARQLquery& _query)
   cout<<"~~~IN GeneralEvaluation::handle"<<endl;
 
   vector<BasicQuery*>& queryList = _query.getBasicQueryVec();
-  cout<<"$$$ In handle queryList's size is "<<queryList.size()<<endl;
+  cout<<"$$$ In handle queryList's size is "<<queryList.size()<<endl; // size is 1
   // enumerate each BasicQuery and retrieve their variables' mapping entity in the VSTree.
   vector<BasicQuery*>::iterator iter = queryList.begin();
-  for (; iter != queryList.end(); iter++)
+  for (; iter != queryList.end(); iter++) // 只有一次循环
     if ((**iter).getEncodeBasicQueryResult()) {
       this->method = -1;
 
@@ -110,6 +110,7 @@ Strategy::handle(SPARQLquery& _query)
         //cout<<"Final result size: "<<(*iter)->getResultList().size()<<endl;
         //continue;
       }
+      cout<<"this->method = "<<this->method<<endl;
       if (this->method < 0) {
         this->method = 0;
       }
@@ -516,9 +517,9 @@ Strategy::handler0(BasicQuery* _bq, vector<unsigned*>& _result_list)
   long tv_retrieve = Util::get_cur_time();
   cout << "after Retrieve, used " << (tv_retrieve - tv_handle) << "ms." << endl;
 
-  bool* d_triple = (bool*)calloc(_bq->getTripleNum(), sizeof(bool));
+  bool* d_triple = (bool*)calloc(_bq->getTripleNum(), sizeof(bool)); // _bq->getTripleNum() = 3
 
-  bool ret2 = pre_handler(_bq, kvstore, pre2num, pre2sub, pre2obj, d_triple);
+  bool ret2 = pre_handler(_bq, kvstore, pre2num, pre2sub, pre2obj, d_triple); // 注意！
   long after_prehandler = Util::get_cur_time();
   cout << "after prehandler: used " << (after_prehandler - tv_retrieve) << " ms" << endl;
   if (!ret2) {

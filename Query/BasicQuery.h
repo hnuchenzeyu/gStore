@@ -118,7 +118,7 @@ class BasicQuery {
   int retrieve_var_num;
   string* var_name;
   IDList* candidate_list;
-  vector<unsigned*> result_list;
+  vector<unsigned*> result_list; // 查询结果
   int* var_degree;
 
   //whether has added the variable's literal candidate
