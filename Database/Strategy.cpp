@@ -114,9 +114,7 @@ Strategy::handle(SPARQLquery& _query)
       if (this->method < 0) {
         this->method = 0;
       }
-
-      this->method = 0;
-
+      
       //QueryHandler dispatch;
       //dispatch[0] = handler0;
       switch (this->method) {
