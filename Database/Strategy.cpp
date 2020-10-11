@@ -192,6 +192,7 @@ Strategy::pre_handler(BasicQuery* basic_query, KVstore* kvstore, TYPE_TRIPLE_NUM
     for (int j = 0; j < var_degree; j++) {
       int neighbor_id = basic_query->getEdgeNeighborID(_var_i, j);
       //-1: constant or variable not in join; otherwise, variable in join
+      //对没有变量的邻居进行处理
       if (neighbor_id != -1) {
         continue; // 下一次循环
       }
@@ -520,7 +521,7 @@ Strategy::handler0(BasicQuery* _bq, vector<unsigned*>& _result_list)
 
   bool* d_triple = (bool*)calloc(_bq->getTripleNum(), sizeof(bool)); // _bq->getTripleNum() = 3
 
-  bool ret2 = pre_handler(_bq, kvstore, pre2num, pre2sub, pre2obj, d_triple); // 注意！
+  bool ret2 = pre_handler(_bq, kvstore, pre2num, pre2sub, pre2obj, d_triple); // czy: 注意！
   long after_prehandler = Util::get_cur_time();
   cout << "after prehandler: used " << (after_prehandler - tv_retrieve) << " ms" << endl;
   if (!ret2) {
@@ -528,7 +529,7 @@ Strategy::handler0(BasicQuery* _bq, vector<unsigned*>& _result_list)
   }
 
   Join* join = new Join(kvstore, pre2num, this->limitID_predicate, this->limitID_literal, this->limitID_entity);
-  join->join_basic(_bq, d_triple); // 注意！
+  join->join_basic(_bq, d_triple); // czy: 注意！这里得到结果
   delete join;
 
   long tv_join = Util::get_cur_time();
