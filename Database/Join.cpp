@@ -227,7 +227,7 @@ Join::join_basic(BasicQuery* _basic_query, bool* d_triple)
 		return false;
 	}
 	*/
-  bool ret3 = this->join();
+  bool ret3 = this->join(); // 选择join方法，最后选择的是muilt_join.
   long after_joinbasic = Util::get_cur_time();
   cout << "after join_basic: used " << (after_joinbasic - begin) << " ms" << endl;
   if (!ret3) {
@@ -235,7 +235,7 @@ Join::join_basic(BasicQuery* _basic_query, bool* d_triple)
     return false;
   }
 
-  bool ret4 = this->only_pre_filter_after_join();
+  bool ret4 = this->only_pre_filter_after_join(); // czy: 注意！
   long after_only_pre_filter = Util::get_cur_time();
   cout << "after only pre filter: used " << (after_only_pre_filter - after_joinbasic) << " ms" << endl;
   if (!ret4) {
@@ -254,7 +254,7 @@ Join::join_basic(BasicQuery* _basic_query, bool* d_triple)
   long after_pre_var = Util::get_cur_time();
   cout << "after pre var: used " << (after_pre_var - after_only_pre_filter) << " ms" << endl;
 
-  this->copyToResult();
+  this->copyToResult(); // get Result
   long after_copy = Util::get_cur_time();
   cout << "after copy to result list: used " << (after_copy - after_pre_var) << " ms" << endl;
 
@@ -1131,7 +1131,7 @@ Join::multi_join()
   //keep an increasing vector for temp results, not in id order
   //vals num generally < 10, so just enum them and check if conncted
   //finally, copy in order to result_list in BasicQuery
-  TableIterator it0;
+  TableIterator it0; // list<RecordType>::iterator
   list<int>::iterator it1;
   vector<int>::iterator it2;
   //list<bool>::iterator it3;

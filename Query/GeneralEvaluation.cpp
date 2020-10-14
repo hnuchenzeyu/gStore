@@ -765,7 +765,15 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       // delete temp;
       // temp = edge3;
 
-      temp->print();
+      //测试从kvstore得到subID和objID的list
+      // unsigned* list;
+      // unsigned list_len = 0;
+      // this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<a>"), list, list_len);
+      // cout<<"list=============================="<<endl;
+      // for(int i = 0; i < list_len; i+=2)
+      //   cout<< list[i] << " " << list[i+1] <<endl;
+      // cout<<"list=============================="<<endl;
+      // temp->print();
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
