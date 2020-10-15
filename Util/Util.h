@@ -148,7 +148,7 @@ in the sparql query can point to the same node in data graph)
 //#define USE_GROUP_DELETE 1
 
 //indicate that in debug mode
-#define DEBUG_JOIN
+// #define DEBUG_JOIN
 //#define DEBUG_STREAM
 //#define DEBUG_PRECISE 1		all information
 //#define DEBUG_KVSTORE 1		//in KVstore
