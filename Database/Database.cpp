@@ -1623,6 +1623,18 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
       cout << "There has answer: " << ans_num << endl;
       cout << "final result is : " << endl;
       // _result_set.output(_fp); //czy: 输出结果
+      
+      // 通过pre得到sub和obj的list
+      cout<< "czy: get a edge whose length is 1." <<endl;
+      unsigned* sub_obj_list;
+      unsigned sub_obj_list_size;
+      this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<a>"), sub_obj_list, sub_obj_list_size);
+      for (unsigned i = 0; i < sub_obj_list_size; i+=2)
+      {
+        cout << sub_obj_list[i] << "\t" << sub_obj_list[i+1] <<endl;
+      }
+      cout<< "czy: get a edge whose length is 1." <<endl;
+
       fprintf(_fp, "\n");
       fflush(_fp); //to empty the output buffer in C (fflush(stdin) not work in GCC)
     }
