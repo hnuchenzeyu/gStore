@@ -1163,6 +1163,7 @@ Join::multi_join()
   this->new_start = this->current_table.end();
 
   this->mystack.push(this->start_id);
+  std::cout<<"mystack.size() is "<<this->mystack.size()<<endl;
 #ifdef DEBUG_JOIN
   //fprintf(stderr, "now to start the stack loop\n");
   cout << "now to start the stack loop" << endl;

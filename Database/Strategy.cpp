@@ -174,9 +174,9 @@ bool
 Strategy::pre_handler(BasicQuery* basic_query, KVstore* kvstore, TYPE_TRIPLE_NUM* pre2num,
                       TYPE_TRIPLE_NUM* pre2sub, TYPE_TRIPLE_NUM* pre2obj, bool* dealed_triple)
 {
-  int triple_num = basic_query->getTripleNum(); // 3
+  int triple_num = basic_query->getTripleNum();
 
-  int var_num = basic_query->getVarNum(); // 4
+  int var_num = basic_query->getVarNum();
   // use constant filter to estimate now many ffits exist
   vector<int> estimate_num(var_num, 10000000);
 
