@@ -2,14 +2,24 @@
 
 using namespace std;
 
-void JumpingLikeJoin::initEdgeTable(TempResultSet *temp)
+TYPE_PREDICATE_ID JumpingLikeJoin::getPreID(String pre)
 {
-  for(int i = 0; i < temp->results[0].result.size(); i++)
+  return this->kvstore->getIDByPredicate(pre);
+}
+
+void JumpingLikeJoin::initSubObjListMap(TYPE_PREDICATE_ID preID)
+{
+  this->kvstore->getsubIDobjIDlistBypreID(preID, this->sub_obj_list, this->sub_obj_list_size);
+  this->sub2pos[this->sub_obj_list[0]] = 0;
+
+  unsigned prevID = this->sub_obj_list[0];
+  for (int i = 2; i < this->sub_obj_list_size; i+=2)
   {
-    unsigned int* ids = temp->results[0].result[i].id;
-    if(this->edgeTable.find(ids[0]) == this->edgeTable.end())
-      this->edgeTable[ids[0]] = vector<unsigned int>();
-    this->edgeTable[ids[0]].push_back(ids[1]);
+    if (this->sub_obj_list[i] == prevID)
+      continue;
+    
+    this->sub2pos[this->sub_obj_list[i]] = i;
+    prevID = this->sub_obj_list[i];
   }
 }
 
