@@ -2,7 +2,7 @@
 
 using namespace std;
 
-TYPE_PREDICATE_ID JumpingLikeJoin::getPreID(String pre)
+TYPE_PREDICATE_ID JumpingLikeJoin::getPreID(std::string pre)
 {
   return this->kvstore->getIDByPredicate(pre);
 }

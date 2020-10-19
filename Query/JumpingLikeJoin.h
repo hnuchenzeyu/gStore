@@ -20,7 +20,7 @@ public:
   JumpingLikeJoin(){}
   JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore){}
 
-  TYPE_PREDICATE_ID getPreID(String pre);
+  TYPE_PREDICATE_ID getPreID(std::string pre);
   void initSubObjListMap(TYPE_PREDICATE_ID preID);
   void buildSubTable(TempResultSet *temp);
   TempResultSet* intersect();
