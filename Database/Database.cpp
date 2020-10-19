@@ -1628,7 +1628,8 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
       cout<< "czy: get a edge whose length is 1." <<endl;
       unsigned* sub_obj_list;
       unsigned sub_obj_list_size;
-      this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<a>"), sub_obj_list, sub_obj_list_size);
+      this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<http://dbpedia.org/ontology/influencedBy>"), sub_obj_list, sub_obj_list_size);
+      cout<< "sub obj list size is " << sub_obj_list_size << endl;
       for (unsigned i = 0; i < sub_obj_list_size; i+=2)
       {
         cout << sub_obj_list[i] << "\t" << sub_obj_list[i+1] <<endl;
