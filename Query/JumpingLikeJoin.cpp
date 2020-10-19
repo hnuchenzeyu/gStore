@@ -24,6 +24,24 @@ void JumpingLikeJoin::buildSubTable(TempResultSet *temp)
   }
 }
 
+TempResultSet* JumpingLikeJoin::intersect()
+{
+  TempResultSet *res = new TempResultSet();
+  res->results.push_back(TempResult());
+
+  res->results[0].id_varset.addVar("?x");
+  res->results[0].id_varset.addVar("?y");
+
+  for (int i = 0; i < this->sub_obj_list_size; i++)
+  {
+    /* code */
+  }
+  
+
+
+  return res;
+}
+
 TempResultSet* JumpingLikeJoin::intersect(TempResultSet *temp1, TempResultSet *temp2)
 {
   int temp1_id_num = temp1->results[0].id_varset.getVarsetSize();

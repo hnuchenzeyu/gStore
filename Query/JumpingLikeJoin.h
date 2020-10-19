@@ -16,6 +16,7 @@ public:
   JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore){}
   void initEdgeTable(TempResultSet *temp);
   void buildSubTable(TempResultSet *temp);
+  TempResultSet* intersect();
   TempResultSet* intersect(TempResultSet *temp1, TempResultSet *temp2);
 };
 

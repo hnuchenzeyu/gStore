@@ -773,7 +773,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       // for(int i = 0; i < list_len; i+=2)
       //   cout<< list[i] << " " << list[i+1] <<endl;
       // cout<<"list=============================="<<endl;
-      // temp->print();
+      temp->print();
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
