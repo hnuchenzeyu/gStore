@@ -129,7 +129,15 @@ bool GeneralEvaluation::doQuery()
     this->rewriting_evaluation_stack.back().group_pattern = this->query_tree.getGroupPattern();
     this->rewriting_evaluation_stack.back().result = NULL;
 
+// =====================Jumping like join==================================================
+    // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
+    // cout << jumpingLikeJoin->getPreID("<a>") <<endl;
+    // jumpingLikeJoin->initSubObjListMap(jumpingLikeJoin->getPreID("<a>"));
+    // this->temp_result = jumpingLikeJoin->intersect();
+// =====================Jumping like join==================================================
+      
     this->temp_result = this->rewritingBasedQueryEvaluation(0);
+
   } else {
     printf("=====================\n");
     printf("||not well-designed||\n");
@@ -742,40 +750,6 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
         long tv_aftry = Util::get_cur_time();
         printf("after tryCache, used %ld ms.\n", tv_aftry - tv_bftry);
       }
-
-//---------------czy implements query of 3 edges with a same label.---------------------------------------------------
-      // initialize the hashTable.
-      // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin();
-
-      // jumpingLikeJoin->initEdgeTable(temp);
-      // jumpingLikeJoin->buildSubTable(temp);
-
-      // TempResultSet* edge3 = jumpingLikeJoin->intersect(temp, temp);
-
-      // // vector<QueryTree::ProjectionVar>& projection = this->query_tree.getProjection();
-      // // projection.clear();
-      // // projection.push_back(QueryTree::ProjectionVar("?x1"));
-      // // projection.push_back(QueryTree::ProjectionVar("?x2"));
-      // // projection.push_back(QueryTree::ProjectionVar("?x3"));
-      // // projection.push_back(QueryTree::ProjectionVar("?x4"));
-
-      // delete jumpingLikeJoin;
-      // jumpingLikeJoin = NULL;
-
-      // delete temp;
-      // temp = edge3;
-
-      //测试从kvstore得到subID和objID的list
-      // unsigned* list;
-      // unsigned list_len = 0;
-      // this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<a>"), list, list_len);
-      // cout<<"list=============================="<<endl;
-      // for(int i = 0; i < list_len; i+=2)
-      //   cout<< list[i] << " " << list[i+1] <<endl;
-      // cout<<"list=============================="<<endl;
-      temp->print();
-
-//---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
       if (sub_result->results.empty()) {
         delete sub_result;

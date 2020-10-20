@@ -1626,11 +1626,12 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
       
       // 通过pre得到sub和obj的list
       // cout<< "czy: get a edge whose length is 1." <<endl;
-      // unsigned* sub_obj_list;
-      // unsigned sub_obj_list_size;
-      // this->kvstore->getsubIDobjIDlistBypreID(this->kvstore->getIDByPredicate("<http://dbpedia.org/ontology/influencedBy>"), sub_obj_list, sub_obj_list_size);
-      // cout<< "sub obj list size is " << sub_obj_list_size << endl;
-      // for (unsigned i = 0; i < sub_obj_list_size; i+=2)
+      // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
+      // jumpingLikeJoin->initSubObjListMap(jumpingLikeJoin->getPreID("<a>"));
+      // unsigned* sub_obj_list = jumpingLikeJoin->getSubObjList();
+      // unsigned sub_obj_list_size = jumpingLikeJoin->getSubObjListSize();
+      // cout<< "sub obj list size is " << jumpingLikeJoin->getSubObjListSize() << endl;
+      // for (unsigned i = 0; i < jumpingLikeJoin->getSubObjListSize(); i+=2)
       // {
       //   cout << sub_obj_list[i] << "\t" << sub_obj_list[i+1] <<endl;
       // }

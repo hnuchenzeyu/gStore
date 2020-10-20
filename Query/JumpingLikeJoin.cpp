@@ -2,7 +2,16 @@
 
 using namespace std;
 
-TYPE_PREDICATE_ID JumpingLikeJoin::getPreID(std::string pre)
+unsigned* JumpingLikeJoin::getSubObjList()
+{
+  return this->sub_obj_list;
+}
+unsigned JumpingLikeJoin::getSubObjListSize()
+{
+  return this->sub_obj_list_size;
+}
+
+TYPE_PREDICATE_ID JumpingLikeJoin::getPreID(string pre)
 {
   return this->kvstore->getIDByPredicate(pre);
 }
@@ -34,6 +43,9 @@ void JumpingLikeJoin::buildSubTable(TempResultSet *temp)
   }
 }
 
+/**
+ * test edge1 join egde1. get edge3's temp result set
+ */
 TempResultSet* JumpingLikeJoin::intersect()
 {
   TempResultSet *res = new TempResultSet();
@@ -42,13 +54,30 @@ TempResultSet* JumpingLikeJoin::intersect()
   res->results[0].id_varset.addVar("?x");
   res->results[0].id_varset.addVar("?y");
 
-  for (int i = 0; i < this->sub_obj_list_size; i++)
+  for (int i = 0; i < this->sub_obj_list_size; i+=2)
   {
-    /* code */
+    if(this->sub2pos.find(this->sub_obj_list[i+1]) == this->sub2pos.end())
+      continue;
+
+    // iteract the edge whose sub equals this->sub_obj_list[i+1]
+    int start_pos = this->sub2pos[this->sub_obj_list[i+1]];
+    for (; this->sub_obj_list[start_pos] == this->sub_obj_list[i+1]; start_pos+=2)
+    {      
+      // from joined list find subID
+      if(this->sub2pos.find(this->sub_obj_list[start_pos+1]) != this->sub2pos.end())
+      {
+        int joined_start_pos = this->sub2pos[this->sub_obj_list[start_pos+1]];
+        for (; this->sub_obj_list[joined_start_pos] == this->sub_obj_list[start_pos+1]; joined_start_pos+=2)
+        {
+          res->results[0].result.push_back(TempResult::ResultPair());
+          unsigned int* res_id = new unsigned int[2];
+          res_id[0] = this->sub_obj_list[i];
+          res_id[1] = this->sub_obj_list[joined_start_pos + 1];
+          res->results[0].result.back().id = res_id;
+        }
+      }
+    }
   }
-  
-
-
   return res;
 }
 

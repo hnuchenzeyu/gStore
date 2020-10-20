@@ -20,6 +20,9 @@ public:
   JumpingLikeJoin(){}
   JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore){}
 
+  unsigned* getSubObjList();
+  unsigned getSubObjListSize();
+
   TYPE_PREDICATE_ID getPreID(std::string pre);
   void initSubObjListMap(TYPE_PREDICATE_ID preID);
   void buildSubTable(TempResultSet *temp);
