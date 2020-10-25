@@ -1623,19 +1623,6 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
       cout << "There has answer: " << ans_num << endl;
       cout << "final result is : " << endl;
       // _result_set.output(_fp); //czy: 输出结果
-      
-      // 通过pre得到sub和obj的list
-      // cout<< "czy: get a edge whose length is 1." <<endl;
-      // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
-      // jumpingLikeJoin->initSubObjListMap(jumpingLikeJoin->getPreID("<a>"));
-      // unsigned* sub_obj_list = jumpingLikeJoin->getSubObjList();
-      // unsigned sub_obj_list_size = jumpingLikeJoin->getSubObjListSize();
-      // cout<< "sub obj list size is " << jumpingLikeJoin->getSubObjListSize() << endl;
-      // for (unsigned i = 0; i < jumpingLikeJoin->getSubObjListSize(); i+=2)
-      // {
-      //   cout << sub_obj_list[i] << "\t" << sub_obj_list[i+1] <<endl;
-      // }
-      // cout<< "czy: get a edge whose length is 1." <<endl;
 
       fprintf(_fp, "\n");
       fflush(_fp); //to empty the output buffer in C (fflush(stdin) not work in GCC)

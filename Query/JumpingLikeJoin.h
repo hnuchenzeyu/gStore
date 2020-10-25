@@ -17,7 +17,7 @@ private:
   std::map<unsigned int, std::vector<unsigned int>> edgeTable;
   std::map<unsigned int, std::vector<unsigned int*>> subTable;
 public:
-  JumpingLikeJoin(){}
+  
   JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore){}
 
   unsigned* getSubObjList();
