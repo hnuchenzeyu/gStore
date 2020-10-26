@@ -743,29 +743,24 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
         printf("after tryCache, used %ld ms.\n", tv_aftry - tv_bftry);
       }
 
-//---------------czy implements query of 3 edges with a same label.---------------------------------------------------
+    //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
       // initialize the hashTable.
-      //JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin();
+      JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
 
-      //jumpingLikeJoin->initEdgeTable(temp);
-      //jumpingLikeJoin->buildSubTable(temp);
+      string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
+      cout<<"predicate is "<<pre<<endl;
+      jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
+      jumpingLikeJoin->buildSubTable(temp);
 
-      //TempResultSet* edge3 = jumpingLikeJoin->intersect(temp, temp);
+      TempResultSet* edge4 = jumpingLikeJoin->intersect(temp);
 
-      //// vector<QueryTree::ProjectionVar>& projection = this->query_tree.getProjection();
-      //// projection.clear();
-      //// projection.push_back(QueryTree::ProjectionVar("?x1"));
-      //// projection.push_back(QueryTree::ProjectionVar("?x2"));
-      //// projection.push_back(QueryTree::ProjectionVar("?x3"));
-      //// projection.push_back(QueryTree::ProjectionVar("?x4"));
+      delete jumpingLikeJoin;
+      jumpingLikeJoin = NULL;
 
-      //delete jumpingLikeJoin;
-      //jumpingLikeJoin = NULL;
+      delete temp;
+      temp = edge4;
 
-      //delete temp;
-      //temp = edge3;
-
-      temp->print();
+      // temp->print();
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
