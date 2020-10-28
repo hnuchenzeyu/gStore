@@ -750,7 +750,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
       cout<<"predicate is "<<pre<<endl;
       jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
-      jumpingLikeJoin->buildSubTable(temp);
+      // jumpingLikeJoin->buildSubTable(temp); // when two joins one, need not build hash table of temp.
 
       TempResultSet* edge4 = jumpingLikeJoin->intersect(temp);
 

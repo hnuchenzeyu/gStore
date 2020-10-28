@@ -44,7 +44,9 @@ TempResultSet* JumpingLikeJoin::intersect(TempResultSet *temp2) // TempResultSet
   res->results[0].id_varset.addVar(temp2->results[0].id_varset.vars[0]);
   res->results[0].id_varset.addVar(temp2->results[0].id_varset.vars.back());
 
+  // len one join len two
   // iterate this->edgeTable.
+  /*
   for (map<unsigned int, vector<unsigned int> >::iterator mit = this->edgeTable.begin();
   mit != this->edgeTable.end(); mit++)
   {
@@ -76,7 +78,33 @@ TempResultSet* JumpingLikeJoin::intersect(TempResultSet *temp2) // TempResultSet
       }
     }
   }
+  */
   
+  // len two join len one
+  for (int i = 0; i < temp2->results[0].result.size(); i++)
+  {
+    unsigned* ids_of_two = temp2->results[0].result[i].id;
+    if (this->edgeTable.find(ids_of_two[1]) != this->edgeTable.end())
+    {
+      vector<unsigned int>& vec_in_edgeTable = this->edgeTable[ids_of_two[1]];
+      for (vector<unsigned int>::iterator it = vec_in_edgeTable.begin(); it != vec_in_edgeTable.end(); it++)
+      {
+        if (this->edgeTable.find(*it) != this->edgeTable.end())
+        {
+          vector<unsigned int>& vec_found = this->edgeTable[*it];
+          for (vector<unsigned int>::iterator vfi = vec_found.begin(); vfi != vec_found.end(); vfi++)
+          {
+            res->results[0].result.push_back(TempResult::ResultPair());
+            unsigned int* res_id = new unsigned int[2];
+            res_id[0] = ids_of_two[0];
+            res_id[1] = *vfi;
+            res->results[0].result.back().id = res_id;
+          }
+        }
+      }
+    }
+  }
+   
 
   // 得到左边结果的id下标
   // int obj_index = temp1_id_num - 1;
