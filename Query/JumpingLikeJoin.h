@@ -35,6 +35,7 @@ public:
   void initEdgeTable(TYPE_PREDICATE_ID preid);
   void buildSubTable(TempResultSet *temp);
   TempResultSet* intersect(TempResultSet *temp2); // TempResultSet *temp1 is removed
+  TempResultSet* intersect(TempResultSet* temp1, TempResultSet* temp2);
 };
 
 #endif //_JUMPING_LIKE_JOIN
