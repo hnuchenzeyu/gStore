@@ -757,7 +757,6 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
         printf("after tryCache, used %ld ms.\n", tv_aftry - tv_bftry);
       }
 
-<<<<<<< HEAD
     //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
       // initialize the hashTable.
       // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
@@ -779,8 +778,6 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
-=======
->>>>>>> e37e1ec828159a5d4e2900593420e834aa33d8f7
       if (sub_result->results.empty()) {
         delete sub_result;
         sub_result = temp;
