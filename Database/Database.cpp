@@ -1622,7 +1622,12 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
         ans_num = min(ans_num, (long long)_result_set.output_limit);
       cout << "There has answer: " << ans_num << endl;
       cout << "final result is : " << endl;
+<<<<<<< HEAD
       // _result_set.output(_fp);
+=======
+      // _result_set.output(_fp); //czy: 输出结果
+
+>>>>>>> e37e1ec828159a5d4e2900593420e834aa33d8f7
       fprintf(_fp, "\n");
       fflush(_fp); //to empty the output buffer in C (fflush(stdin) not work in GCC)
     }

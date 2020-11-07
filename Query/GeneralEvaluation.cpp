@@ -129,7 +129,21 @@ bool GeneralEvaluation::doQuery()
     this->rewriting_evaluation_stack.back().group_pattern = this->query_tree.getGroupPattern();
     this->rewriting_evaluation_stack.back().result = NULL;
 
-    this->temp_result = this->rewritingBasedQueryEvaluation(0);
+// =====================Jumping like join==================================================
+    cout<< "this->kvstore: " << this->kvstore <<endl;
+    JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
+    cout << jumpingLikeJoin->getPreID("<http://dbpedia.org/ontology/child>") <<endl;
+    long t1 = Util::get_cur_time();
+    jumpingLikeJoin->initSubObjListMap(jumpingLikeJoin->getPreID("<http://dbpedia.org/ontology/child>"));
+    long t2 = Util::get_cur_time();
+    cout<< "czy: after init map, used "<< t2 -t1 << "ms" <<endl;
+    this->temp_result = jumpingLikeJoin->intersect();
+    long t3 = Util::get_cur_time();
+    cout<< "czy: after intersect, used "<< t3 -t2 << "ms" <<endl;
+// =====================Jumping like join==================================================
+      
+    // this->temp_result = this->rewritingBasedQueryEvaluation(0);
+
   } else {
     printf("=====================\n");
     printf("||not well-designed||\n");
@@ -743,6 +757,7 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
         printf("after tryCache, used %ld ms.\n", tv_aftry - tv_bftry);
       }
 
+<<<<<<< HEAD
     //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
       // initialize the hashTable.
       // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
@@ -764,6 +779,8 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 
 //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
 
+=======
+>>>>>>> e37e1ec828159a5d4e2900593420e834aa33d8f7
       if (sub_result->results.empty()) {
         delete sub_result;
         sub_result = temp;
