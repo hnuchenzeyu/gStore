@@ -19,6 +19,8 @@ private:
   //based on map.
   std::map<unsigned int, std::vector<unsigned int> > edgeTable;
   std::map<unsigned int, std::vector<unsigned int*> > subTable;
+
+  std::map<unsigned int, TempResultSet*> intermediate;
 public:
 
   JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore)
@@ -34,7 +36,7 @@ public:
   // functions based on map.
   void initEdgeTable(TYPE_PREDICATE_ID preid);
   void buildSubTable(TempResultSet *temp);
-  TempResultSet* intersect(TempResultSet *temp2); // TempResultSet *temp1 is removed
+  TempResultSet* intersect(TempResultSet* temp2); // TempResultSet *temp1 is removed
   TempResultSet* intersect(TempResultSet* temp1, TempResultSet* temp2);
 };
 
