@@ -73,7 +73,7 @@ class Join {
   bool* dealed_triple;
   stack<int> mystack;
 
-  vector<unsigned*>* result_list;
+  vector<unsigned*>* result_list; // 指向结果
   vector<Satellite> satellites;
   unsigned* record;
   unsigned record_len;

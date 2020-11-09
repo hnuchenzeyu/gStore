@@ -1,6 +1,7 @@
 #ifndef _JUMPING_LIKE_JOIN
 #define _JUMPING_LIKE_JOIN
 
+#include "../KVstore/KVstore.h"
 #include "../Util/Util.h"
 #include "TempResult.h"
 
