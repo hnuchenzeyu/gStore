@@ -753,19 +753,18 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
       jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
 
       TempResultSet* edge2 = temp;
-      jumpingLikeJoin->buildSubTable(edge2); // when two joins one, need not build hash table of temp.
 
-      // TempResultSet* edge3 = jumpingLikeJoin->intersect(edge1);
-      // jumpingLikeJoin->buildSubTable(edge3);
-
-      TempResultSet* edge5 = jumpingLikeJoin->intersect(edge2, edge2);
+      TempResultSet* edge3 = jumpingLikeJoin->getEdge3ByEgde1();
+      
+      jumpingLikeJoin->buildSubTable(edge2);
+      TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
 
       delete jumpingLikeJoin;
       jumpingLikeJoin = NULL;
 
       delete edge2;
-      // delete edge3;
-      temp = edge5;
+      delete edge3;
+      temp = edge6;
 
       // temp->print();
 

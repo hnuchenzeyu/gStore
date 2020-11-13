@@ -32,6 +32,47 @@ void JumpingLikeJoin::buildSubTable(TempResultSet *temp)
   }
 }
 
+TempResultSet* JumpingLikeJoin::getEdge3ByEgde1()
+{
+  TempResultSet *res = new TempResultSet();
+  res->results.push_back(TempResult());
+
+  res->results[0].id_varset.addVar("?x");
+  res->results[0].id_varset.addVar("?y");
+
+  for (map<unsigned int, vector<unsigned int> >::iterator mit = this->edgeTable.begin();
+  mit != this->edgeTable.end(); mit++)
+  {
+    // iterate vector<unsigned int> in this->edgeTable.
+    for(vector<unsigned int>::iterator vit = mit->second.begin();
+    vit != mit->second.end(); vit++)
+    {
+      if(this->edgeTable.find(*vit) != this->edgeTable.end())
+      {
+        // iterate the edges whose subject is the id
+        const vector<unsigned int>& vec_in_edgeTable = this->edgeTable[*vit];
+        for (int i = 0; i < vec_in_edgeTable.size(); i++)
+        {
+          if(this->edgeTable.find(vec_in_edgeTable[i]) != this->edgeTable.end())
+          {
+            // one edge's obj is egde2's subject
+            const vector<unsigned int>& vec_of_last_edge = this->edgeTable[vec_in_edgeTable[i]];
+            for (int j = 0; j < vec_of_last_edge.size(); j++)
+            {
+              res->results[0].result.push_back(TempResult::ResultPair());
+              unsigned int* res_id = new unsigned int[2];
+              res_id[0] = mit->first;
+              res_id[1] = vec_of_last_edge[j];
+              res->results[0].result.back().id = res_id;
+            }
+          }
+        }
+      }
+    }
+  }
+  return res;
+}
+
 TempResultSet *JumpingLikeJoin::intersect(TempResultSet *temp2) // TempResultSet *temp1,
 {
   // int temp1_id_num = temp1->results[0].id_varset.getVarsetSize();
