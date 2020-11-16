@@ -128,8 +128,27 @@ bool GeneralEvaluation::doQuery()
     this->rewriting_evaluation_stack.push_back(EvaluationStackStruct());
     this->rewriting_evaluation_stack.back().group_pattern = this->query_tree.getGroupPattern();
     this->rewriting_evaluation_stack.back().result = NULL;
+
+    // initialize the hashTable.
+    JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
+
+    string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
+    cout<<"predicate is "<<pre<<endl;
+    jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
+
+    TempResultSet* edge3 = jumpingLikeJoin->getEdge3ByEgde1();
       
-    this->temp_result = this->rewritingBasedQueryEvaluation(0);
+    // jumpingLikeJoin->buildSubTable(edge3);
+    TempResultSet* edge5 = jumpingLikeJoin->intersect(edge3);
+
+    this->temp_result = jumpingLikeJoin->intersect(edge5);
+
+    delete edge3;
+    delete edge5;
+    delete jumpingLikeJoin;
+    jumpingLikeJoin = NULL;
+      
+    // this->temp_result = this->rewritingBasedQueryEvaluation(0);
 
   } else {
     printf("=====================\n");
@@ -746,25 +765,30 @@ TempResultSet* GeneralEvaluation::rewritingBasedQueryEvaluation(int dep)
 
     //---------------czy implements query of 3 edges with a same label.---------------------------------------------------
       // initialize the hashTable.
-      JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
+      // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
 
-      string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
-      cout<<"predicate is "<<pre<<endl;
-      jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
+      // string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
+      // cout<<"predicate is "<<pre<<endl;
+      // jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
 
-      TempResultSet* edge2 = temp;
+      // // TempResultSet* edge2 = temp;
 
-      TempResultSet* edge3 = jumpingLikeJoin->getEdge3ByEgde1();
+      // TempResultSet* edge3 = jumpingLikeJoin->getEdge3ByEgde1();
       
-      jumpingLikeJoin->buildSubTable(edge2);
-      TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
+      // jumpingLikeJoin->buildSubTable(edge3);
+      // TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge3);
 
-      delete jumpingLikeJoin;
-      jumpingLikeJoin = NULL;
+      // delete jumpingLikeJoin;
+      // jumpingLikeJoin = NULL;
 
-      delete edge2;
-      delete edge3;
-      temp = edge6;
+      // delete edge2;
+      // delete edge3;
+      // temp = edge6;
+
+      // Because edge1 doesn't need to revoke this->rewritingBasedQueryEvaluation()
+      // We use kvstore to get egde1 and then edge1 jumps to edge3, so edge7 is gotten in this way.
+      // We implement before this->rewritingBasedQueryEvaluation(0);
+      // And we comment this->rewritingBasedQueryEvaluation(0);
 
       // temp->print();
 

@@ -84,7 +84,7 @@ TempResultSet *JumpingLikeJoin::intersect(TempResultSet *temp2) // TempResultSet
   res->results[0].id_varset.addVar(temp2->results[0].id_varset.vars[0]);
   res->results[0].id_varset.addVar(temp2->results[0].id_varset.vars.back());
 
-  // len one join len two
+  // len one join temp2
   // iterate this->edgeTable.
   /*
   for (map<unsigned int, vector<unsigned int> >::iterator mit = this->edgeTable.begin();
@@ -120,7 +120,7 @@ TempResultSet *JumpingLikeJoin::intersect(TempResultSet *temp2) // TempResultSet
   }
   */
 
-  // len two join len one
+  // temp2 join len one
   for (int i = 0; i < temp2->results[0].result.size(); i++)
   {
     unsigned *ids_of_two = temp2->results[0].result[i].id;
