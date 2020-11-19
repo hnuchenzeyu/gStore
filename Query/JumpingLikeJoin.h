@@ -9,6 +9,7 @@ class JumpingLikeJoin
 {
 private:
   KVstore* kvstore;
+  string pre;
 
   //use array
   unsigned* sub_obj_list;
@@ -24,7 +25,7 @@ private:
   std::map<unsigned int, TempResultSet*> intermediate;
 public:
 
-  JumpingLikeJoin(KVstore* _kvstore):kvstore(_kvstore)
+  JumpingLikeJoin(KVstore* _kvstore,string _pre):kvstore(_kvstore), pre(_pre)
   {}
 
   TYPE_PREDICATE_ID getPreID(std::string pre);
@@ -40,6 +41,8 @@ public:
   TempResultSet* getEdge3ByEgde1();
   TempResultSet* intersect(TempResultSet* temp2); // TempResultSet *temp1 is removed
   TempResultSet* intersect(TempResultSet* temp1, TempResultSet* temp2);
+
+  static void *run(void *args);
 };
 
 #endif //_JUMPING_LIKE_JOIN

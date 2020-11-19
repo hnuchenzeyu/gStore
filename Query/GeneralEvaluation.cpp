@@ -129,22 +129,27 @@ bool GeneralEvaluation::doQuery()
     this->rewriting_evaluation_stack.back().group_pattern = this->query_tree.getGroupPattern();
     this->rewriting_evaluation_stack.back().result = NULL;
 
-    // initialize the hashTable.
-    JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore);
-
     string pre = this->query_tree.getGroupPattern().sub_group_pattern[0].pattern.predicate.value;
     cout<<"predicate is "<<pre<<endl;
-    jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
 
-    TempResultSet* edge3 = jumpingLikeJoin->getEdge3ByEgde1();
-      
-    // jumpingLikeJoin->buildSubTable(edge3);
-    TempResultSet* edge5 = jumpingLikeJoin->intersect(edge3);
+    // initialize the hashTable.
+    JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore, pre);
 
-    this->temp_result = jumpingLikeJoin->intersect(edge5);
+    pthread_t thread_get_edge3;
+    pthread_create(&thread_get_edge3, NULL, JumpingLikeJoin::run, (void *)jumpingLikeJoin);
 
+    TempResultSet *edge2 = this->rewritingBasedQueryEvaluation(0);
+
+    TempResultSet* edge3;
+    pthread_join(thread_get_edge3, (void **)&edge3);
+
+    jumpingLikeJoin->buildSubTable(edge2);
+    TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
+
+    this->temp_result = edge6;
+
+    delete edge2;
     delete edge3;
-    delete edge5;
     delete jumpingLikeJoin;
     jumpingLikeJoin = NULL;
       
