@@ -1438,7 +1438,8 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
   //GeneralEvaluation general_evaluation = new GeneralEvaluation(this->vstree, this->kvstore, this->stringindex, this->query_cache, this->pre2num,
   //    this->pre2sub, this->pre2obj, this->limitID_predicate, this->limitID_literal, this->limitID_entity);
 
-  long tv_begin = Util::get_cur_time();
+  cout<<"=========== Time starts here ================================================"<<endl;
+  long tv_begin = Util::get_cur_time(); // from here
   cout << "lock the query_parse_lock ." << endl;
   this->query_parse_lock.lock();
   cout << "lock the query_parse_lock successfully! ." << endl;
@@ -1614,6 +1615,7 @@ Database::query(const string _query, ResultSet& _result_set, FILE* _fp, bool upd
 
   long tv_final = Util::get_cur_time();
   cout << "Total time used: " << (tv_final - tv_begin) << "ms." << endl;
+  cout<<"=========== Time ends here ================================================"<<endl;
   //if (general_evaluation.needOutputAnswer())
   if (!export_flag) {
     if (need_output_answer) {

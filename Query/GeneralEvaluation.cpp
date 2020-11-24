@@ -135,13 +135,20 @@ bool GeneralEvaluation::doQuery()
     // initialize the hashTable.
     JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore, pre);
 
-    pthread_t thread_get_edge3;
-    pthread_create(&thread_get_edge3, NULL, JumpingLikeJoin::run, (void *)jumpingLikeJoin);
-
+    //concurrency -> line
+    // pthread_t thread_get_edge3;
+    // pthread_create(&thread_get_edge3, NULL, JumpingLikeJoin::run, (void *)jumpingLikeJoin);
+    long e2_begin = Util::get_cur_time();
     TempResultSet *edge2 = this->rewritingBasedQueryEvaluation(0);
+    long e2_end = Util::get_cur_time();
+    cout<<"Getting edge2 uses "<<e2_end-e2_begin<<" ms"<<endl;
 
-    TempResultSet* edge3;
-    pthread_join(thread_get_edge3, (void **)&edge3);
+    long e3_begin = Util::get_cur_time();
+    TempResultSet *edge3;
+    edge3 = (TempResultSet *)JumpingLikeJoin::run((void *)jumpingLikeJoin);
+    long e3_end = Util::get_cur_time();
+    cout<<"Getting edge3 uses "<<e3_end-e3_begin<<" ms"<<endl;
+    // pthread_join(thread_get_edge3, (void **)&edge3);
 
     jumpingLikeJoin->buildSubTable(edge2);
     TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
