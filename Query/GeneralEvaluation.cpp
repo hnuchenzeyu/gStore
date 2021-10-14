@@ -133,34 +133,64 @@ bool GeneralEvaluation::doQuery()
     cout<<"predicate is "<<pre<<endl;
 
     // initialize the hashTable.
-    JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore, pre);
+    // JumpingLikeJoin* jumpingLikeJoin = new JumpingLikeJoin(this->kvstore, pre);
+
+    // 常量开头的部分3边结果
+    // long e3_init = Util::get_cur_time();
+    // jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
+    // long e3_begin = Util::get_cur_time();
+    // cout<<"build edge1 uses "<<e3_begin-e3_init<<" ms"<<endl;
+    // TempResultSet *edge3;
+    // edge3 = jumpingLikeJoin->getEdge3ByEgde1(jumpingLikeJoin->getEntityID("<http://db.uwaterloo.ca/~galuc/wsdbm/User709697>"));
+    // this->temp_result = edge3;
+    // long e3_end = Util::get_cur_time();
+    // cout<<"Getting edge3 uses "<<e3_end-e3_begin<<" ms"<<endl;
+
+    // 4边：2边rewritng得出，再与1边intersect
+    // TempResultSet* edge2;
+    // edge2 = this->rewritingBasedQueryEvaluation(0);
+    // long e4_init = Util::get_cur_time();
+    // jumpingLikeJoin->initEdgeTable(jumpingLikeJoin->getPreID(pre));
+    // long e4_begin = Util::get_cur_time();
+    // cout<<"build edge1 uses "<<e4_begin-e4_init<<" ms"<<endl;
+    // TempResultSet* edge4 = jumpingLikeJoin->intersect(jumpingLikeJoin->getEntityID("<http://db.uwaterloo.ca/~galuc/wsdbm/User709697>"), edge2);
+    // long e4_end = Util::get_cur_time();
+    // cout<<"Getting edge4 uses "<<e4_end-e4_begin<<" ms"<<endl;
+    //  this->temp_result = edge4;
+
+    // 5边：得到2边所有结果，intersect时常量过滤
+    // TempResultSet* edge2;
+    // edge2 = this->rewritingBasedQueryEvaluation(0);
 
     //concurrency -> line
     // pthread_t thread_get_edge3;
     // pthread_create(&thread_get_edge3, NULL, JumpingLikeJoin::run, (void *)jumpingLikeJoin);
-    long e2_begin = Util::get_cur_time();
-    TempResultSet *edge2 = this->rewritingBasedQueryEvaluation(0);
-    long e2_end = Util::get_cur_time();
-    cout<<"Getting edge2 uses "<<e2_end-e2_begin<<" ms"<<endl;
+    // long e2_begin = Util::get_cur_time();
+    // TempResultSet *edge2 = this->rewritingBasedQueryEvaluation(0);
+    // long e2_end = Util::get_cur_time();
+    // cout<<"Getting edge2 uses "<<e2_end-e2_begin<<" ms"<<endl;
 
-    long e3_begin = Util::get_cur_time();
-    TempResultSet *edge3;
-    edge3 = (TempResultSet *)JumpingLikeJoin::run((void *)jumpingLikeJoin);
-    long e3_end = Util::get_cur_time();
-    cout<<"Getting edge3 uses "<<e3_end-e3_begin<<" ms"<<endl;
-    // pthread_join(thread_get_edge3, (void **)&edge3);
+    // long e3_begin = Util::get_cur_time();
+    // TempResultSet *edge3;
+    // edge3 = (TempResultSet *)JumpingLikeJoin::run((void *)jumpingLikeJoin);
+    // long e3_end = Util::get_cur_time();
+    // cout<<"Getting edge3 uses "<<e3_end-e3_begin<<" ms"<<endl;
+    // // pthread_join(thread_get_edge3, (void **)&edge3);
 
-    jumpingLikeJoin->buildSubTable(edge2);
-    TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
+    // jumpingLikeJoin->buildSubTable(edge2);
+    // TempResultSet* edge6 = jumpingLikeJoin->intersect(edge3, edge2);
 
-    this->temp_result = edge6;
+    // this->temp_result = edge6;
 
-    delete edge2;
-    delete edge3;
-    delete jumpingLikeJoin;
-    jumpingLikeJoin = NULL;
-      
-    // this->temp_result = this->rewritingBasedQueryEvaluation(0);
+    // delete edge2;
+    // delete edge3;
+    // delete jumpingLikeJoin;
+    // jumpingLikeJoin = NULL;
+
+    long origin_begin = Util::get_cur_time();
+    this->temp_result = this->rewritingBasedQueryEvaluation(0);
+    long origin_end = Util::get_cur_time();
+    cout<<"Getting temp_result uses "<<origin_end-origin_begin<<" ms"<<endl;
 
   } else {
     printf("=====================\n");

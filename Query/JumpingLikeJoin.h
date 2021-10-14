@@ -29,6 +29,7 @@ public:
   {}
 
   TYPE_PREDICATE_ID getPreID(std::string pre);
+  TYPE_ENTITY_LITERAL_ID getEntityID(std::string entity);
 
   //function based on array.
   void initSub2Pos(TYPE_PREDICATE_ID preid);
@@ -39,7 +40,9 @@ public:
   void initEdgeTable(TYPE_PREDICATE_ID preid);
   void buildSubTable(TempResultSet *temp);
   TempResultSet* getEdge3ByEgde1();
+  TempResultSet* getEdge3ByEgde1(TYPE_ENTITY_LITERAL_ID id); // 常量开头的3边路径
   TempResultSet* intersect(TempResultSet* temp2); // TempResultSet *temp1 is removed
+  TempResultSet* intersect(TYPE_ENTITY_LITERAL_ID id, TempResultSet* temp2); // TempResultSet *temp1 is removed
   TempResultSet* intersect(TempResultSet* temp1, TempResultSet* temp2);
 
   static void *run(void *args);
